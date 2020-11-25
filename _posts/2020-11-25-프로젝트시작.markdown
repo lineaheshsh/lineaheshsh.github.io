@@ -1,10 +1,11 @@
 ---
 layout: post
-title:  "프로젝트 시작과 그 기록물들"
+title: 프로젝트 시작
 summary: 열심히 기록하자!
 author: Lee Chang Ho
 date: '2020-11-25 09:41:00 +0900'
 category: 프로젝트
+published: true
 ---
 
 ## 먼저 내가 이번에 진행 할 프로젝트의 스펙은 다음과 같다.
@@ -18,7 +19,6 @@ Framework 및 솔루션 | 역활 | 버전
 `Kibana` | 아직 어디에 쓸지 감이 오질 않는다.. | 7.10.0
 `Maria DB` | DB | 10.3
 
-> Spring Boot, Python, ELK(Elastic Search, LogStash, Kibana), Maria DB 를 이용하여 만들 것이고  
-> 개념을 잡기 위한 프로젝트이므로 필요한 데이터를 Python을 통해 N사의 뉴스를 크롤링을 한 후 Maria DB에 적재시키고 그 뒤에 LogStash의 jdbc input plugin을 통해 Schedule을 설정하여 Elastic Search에 색인을 할 것이다.  
-> 그 뒤에 Spring Boot와 thymeleaf를 활용하여 웹서비스를 만들어 게시판 페이지를 하나 만들 생각이다.
-
+>> Spring Boot, Python, ELK(Elastic Search, LogStash, Kibana), Maria DB 를 이용하여 만들 것이고  
+>> 개념을 잡기 위한 프로젝트이므로 필요한 데이터를 Python을 통해 N사의 뉴스를 크롤링을 한 후 Maria DB에 적재시키고 그 뒤에 LogStash의 jdbc input plugin을 통해 Schedule을 설정하여 Elastic Search에 색인을 할 것이다.  
+>> 그 뒤에 Spring Boot와 thymeleaf를 활용하여 웹서비스를 만들어 게시판 페이지를 하나 만들 생각이다.
