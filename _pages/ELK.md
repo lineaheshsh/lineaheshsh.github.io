@@ -1,6 +1,6 @@
 ---
 layout: page
-title:ELK
+title: ELK
 permalink: /elk/
 image: 01.jpg
 ---
