@@ -9,13 +9,14 @@ category: 프로젝트
 
 # 먼저 내가 이번에 진행 할 프로젝트의 스펙은 다음과 같다.
 
-| Framework 및 솔루션 | 역활 | 버전 |
-| `Spring Boot` | BackEnd | 2.1.7.RELEASE |
-| `Python` | 웹 크롤링 | 3.9 |
-| `Elastic Search` | 검색엔진 | 7.10.0 |
-| `LogStash` | MariaDB와 검색엔진간의 커넥터 역활 | 7.10.0 |
-| `Kibana` | 아직 어디에 쓸지 감이 오질 않는다.. | 7.10.0 |
-| `Maria DB` | DB | 10.3 |
+Framework 및 솔루션 | 역활 | 버전
+---|:---:|---:
+`Spring Boot` | BackEnd | 2.1.7.RELEASE
+`Python` | 웹 크롤링 | 3.9
+`Elastic Search` | 검색엔진 | 7.10.0
+`LogStash` | MariaDB와 검색엔진간의 커넥터 역활 | 7.10.0
+`Kibana` | 아직 어디에 쓸지 감이 오질 않는다.. | 7.10.0
+`Maria DB` | DB | 10.3
 
 > Spring Boot, Python, ELK(Elastic Search, LogStash, Kibana), Maria DB 를 이용하여 만들 것이고  
 > 개념을 잡기 위한 프로젝트이므로 필요한 데이터를 Python을 통해 N사의 뉴스를 크롤링을 한 후 Maria DB에 적재시키고 그 뒤에 LogStash의 jdbc input plugin을 통해 Schedule을 설정하여 Elastic Search에 색인을 할 것이다.  
