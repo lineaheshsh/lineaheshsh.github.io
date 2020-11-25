@@ -1,7 +1,7 @@
 ---
 layout: page
-title: About
-permalink: /about/
+title:ELK
+permalink: /elk/
 image: 01.jpg
 ---
 
