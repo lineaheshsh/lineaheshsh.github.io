@@ -1,6 +1,5 @@
 ---
 layout: post
-title:  파이썬 웹크롤링 1단계
 summary: 열심히 기록하자!
 author: Lee Chang Ho
 date: '2020-11-25 09:41:00 +0900'
