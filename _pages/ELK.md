@@ -1,4 +1,4 @@
 ---
 layout: page
-title: ELK
+title: Elastic Search, LogStash, Kibana
 ---
