@@ -1,0 +1,11 @@
+---
+layout: post
+title:  파이썬 웹크롤링 1단계
+summary: 열심히 기록하자!
+author: Lee Chang Ho
+date: '2020-11-25 09:41:00 +0900'
+category: 프로젝트
+tags:   Python
+---
+
+### 첫번째로 Python을 이용하여 데이터를 수집할 것이다. 대상은 네이버 뉴스로 정하였다.
