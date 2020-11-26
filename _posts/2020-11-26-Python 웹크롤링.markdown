@@ -28,4 +28,4 @@ tags:   파이썬, Python, Crawling
 ##### 그 중 나는 webDriver를 이용한 방식을 택하였다.
 ##### 먼저 크롬 webDriver를 다운로드 받고 원하는 경로에 넣어둔다. 필자의 경우 프로젝트 안에 driver라는 폴더를 만들어 그 안에 넣어놨다.
 
-![이미지]({{ site.url }}/webDriver위치.png)
+![이미지]({{ site.url }}/images/webDriver위치.png)
