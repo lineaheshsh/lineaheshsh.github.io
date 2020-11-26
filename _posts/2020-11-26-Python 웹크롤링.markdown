@@ -29,3 +29,108 @@ tags:   파이썬, Python, Crawling
 ##### 먼저 크롬 webDriver를 다운로드 받고 원하는 경로에 넣어둔다. 필자의 경우 프로젝트 안에 driver라는 폴더를 만들어 그 안에 넣어놨다.
 
 ![이미지]({{ site.url }}/images/webDriver위치.png)
+
+##### 그 뒤에 아래와 같이 Python 코드를 작성하였다.
+```python
+import time
+import pymysql.cursors
+import multiprocessing
+from selenium import webdriver
+from bs4 import BeautifulSoup
+
+def init(pCode):
+    driver = webdriver.Chrome('driver/chromedriver.exe')
+    time.sleep(2)
+
+    crawling(driver, pCode)
+
+def crawling(pDriver, pCode):
+
+    # mysql ########################## 
+    conn = pymysql.connect( host='localhost', user='????', password='????', db='zzangho', charset='utf8' )
+    curs = conn.cursor()
+
+    i = 1
+    while True:
+        print("pagenum :: " + str(i))
+        pDriver.get("https://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=" + pCode + "#&date=%2000:00:00&page=" + str(i))
+
+        html = pDriver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
+
+        #링크
+        hrefs = soup.select(
+            '#section_body > ul > li > dl > dt:nth-child(1) > a'
+        )
+
+        #제목
+        titles = soup.select(
+            '#section_body > ul > li > dl > dt:nth-child(2) > a'
+        )
+
+        #신문사
+        companies = soup.select(
+            '#section_body > ul > li > dl > dd > span.writing'
+        )
+
+        if len(hrefs) <= 0: 
+            break
+        
+
+        contents = []
+        dates = []
+        ampms = []
+        times = []
+
+        ## 상세페이지 수집(본문내용, 작성일)
+        for href in hrefs:
+            sub_url = 'https://news.naver.com' + href.attrs['href']
+
+            pDriver.get(sub_url)
+
+            sub_html = pDriver.page_source
+            sub_soup = BeautifulSoup(sub_html, 'html.parser')
+            content = sub_soup.select_one('div#articleBodyContents').get_text()
+            fullDate = sub_soup.select_one('span.t11').get_text()
+            date = fullDate.split(" ")[0]
+            ampm = fullDate.split(" ")[1]
+            time = fullDate.split(" ")[2]
+
+            contents.append(content)
+            dates.append(date[:-1])
+            ampms.append(ampm)
+            times.append(time)
+
+        for item in zip(hrefs, titles, companies, contents, dates, ampms, times):
+
+            sSql = "select * from tb_news where CATEGORY=%s and TITLE=%s and CONTENTS=%s"
+            curs.execute(sSql, (pCode, item[1].text, item[3]))
+            rows = curs.fetchall()
+
+            if len(rows) == 0:
+                iSql = "insert into tb_news(CATEGORY, TITLE, CONTENTS, WRITER, DATE, AMPM, TIME, COMPANY, URL, CRAWLER_DT, UDT_DT) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,NOW(),NOW())"
+                curs.execute(iSql, (pCode ,item[1].text , item[3], '', item[4], item[5], item[6], item[2].text, 'https://news.naver.com' + item[0].attrs['href']))
+
+        conn.commit()
+
+        # 페이지 증가
+        i += 1
+        
+    close(pDriver)
+    conn.close()
+
+def close(pDriver):
+    pDriver.quit()
+    
+news_code = ['100','101','102','103','104','105']
+
+if __name__ == '__main__':
+    pool = multiprocessing.Pool(processes=2)
+    pool.map(init, news_code)
+    pool.close()
+    pool.join()
+```
+
+##### 이 소스를 간략히 설명하자면 멀티 프로세싱으로 2개의 프로세서가 각각 돌면서 news_code 배열의 코드값을 URL 파라메터에 넘겨주어 해당 페이지의 게시글들을 긁어온 뒤 내가 사용할 필드(링크, 제목, 본문, 날짜, 신문사)를 파싱하여 MariaDB에 넣는 소스이다. 이 파일을 실행하면 50번 라인에 연동 한 MariaDB에 데이터가 들어간다.  
+
+##### 웹 크롤러 소스는 현재 단계에서는 중요한게 아니라 여기까지만 작업하고 다음에 좀 더 세밀하게 들어가보도록 하자
