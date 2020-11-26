@@ -12,6 +12,8 @@ tags:   Spring Boot, Spring, Gradle
 
 ### 스프링 부트 시작(Gradle)  
 
+###### 엊그제 교보문고에 엘라스틱서치 관련 서적을 사러갔다가 스프링 부트 책을 하나사서 왔다. 딱 보자마자 사야겠다라고 생각을 하였다. 그 이유는 책 안에 스프링 부트, 테스트, JPA, AWS 배포 등 최근에 해봐야겠다고 생각한 것들이 하나의 프로젝트로 쭈욱 이어져 있었기 때문이다. 책을 사서 공부하면서 이번에 블로그에 기록을 남겨 볼까 한다.
+
 #### 이 글은 "스프링 부트와 AWS로 혼자 구현하는 웹 서비스" 책을 기반으로 작성하고 있습니다.  
 #### 필자의 경우 Spring Tool을 STS만 쓰다가 인텔리제이가 좋다고 하여 한번 써보고 싶어 이번 프로젝트는 인텔리제이로 진행을 하게 되었습니다.  
 
@@ -51,6 +53,26 @@ repositories {
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+```
+
+###### 그 뒤에 src/main/java 경로 밑에 패키지를 하나 만들어준다. 필자의 경우 처음에 GroupID를 com.zzangho.project라고 지었기 때문에 com.zzangho.project.springboot라고 새로운 패키지를 하나 만들어 주었다.  
+###### 그런 뒤에 Application이라는 Java Class 파일을 만들어 준 뒤 아래와 같이 소스를 추가한다.
+
+```java
+package com.zzangho.project.springboot;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+// 아래 어노테이션으로 인해 스프링 부트의 자동 설정, 스프링 Bean 읽기와 생성을 모두 자동으로 설정 됨
+// 특히나 @SpringBootApplication이 있는 위치부터 설정을 읽어가기 때문에 이 클래스는 항상 프로젝트의 최상단에 위치해야만 함
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args); // 내장 WAS 실행
+    }
 }
 
 ```
