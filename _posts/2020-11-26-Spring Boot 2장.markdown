@@ -104,7 +104,58 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
+```  
+###### 다음으로 Marketplace 탭으로 이동하여 "lombok"을 검색하여 install을 한다.  
+###### 마지막으로 [Setting -> Build -> Compiler -> Annotation Processor]에 들어가 "Enable annotaion processing"을 체크한다.  
+---
+###### 롬복을 설정하였으니 기존 코드를 롬복으로 변경해 보자  
+###### 먼저 web 밑에 dto 패키지를 추가하자. 앞으로 모든 응답 Dto는 이 Dto 패키지에 추가한다. 이 패키지에 HelloResponseDto를 생성한다. (아래 그림 참고)
+
+![이미지]({{ site.url }}/images/HelloDto.png)
+
+###### HelloResponseDto 코드를 아래와 같이 작성한다.
+
+```java
+package com.zzangho.project.springboot.web.dto;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter // 선언된 모든 필드의 get 메소드를 생성해 줍니다.
+@RequiredArgsConstructor    // 선언된 모든 final 필드가 포함된 생성자를 생성해 줍니다.
+public class HelloResponseDto {
+
+    private final String name;
+    private final int amount;
+}
+
 ```
 
-###### 다음으로 Marketplace 탭으로 이동하여 "lombok"을 검색하여 install을 한다.  
-###### 마지막으로 [Setting -> Build -> Compiler -> Annotation Processor]에 들어가 "Enable annotaion processing"을 체크한다.
+
+###### HelloResponseDto 테스트 코드도 작성해보자. HelloResponseDtoTest 코드는 다음과 같다.
+
+```java
+package com.zzangho.project.springboot.web.dto;
+
+import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+public class HelloResponseDtoTest {
+
+    @Test
+    public void 롬복_기능_테스트() {
+        //given
+        String name = "test";
+        int amount = 1000;
+
+        //when
+        HelloResponseDto dto = new HelloResponseDto(name, amount);
+
+        //then
+        assertThat(dto.getName()).isEqualTo(name);
+        assertThat(dto.getAmount()).isEqualTo(amount);
+    }
+}
+
+```
+
+###### 해당 메소드를 실행시키면 정상적으로 테스트가 잘 된다.
