@@ -57,7 +57,8 @@ dependencies {
 
 ```
 
-###### 그 뒤에 src/main/java 경로 밑에 패키지를 하나 만들어준다. 필자의 경우 처음에 GroupID를 com.zzangho.project라고 지었기 때문에 com.zzangho.project.springboot라고 새로운 패키지를 하나 만들어 주었다.  
+###### 그 뒤에 src/main/java 경로 밑에 패키지를 하나 만들어준다. 필자의 경우 처음에 GroupID를 com.zzangho.project라고 지었기 때문에 com.zzangho.project.springboot라고 새로운 패키지를 하나 만들어 주었다. (아래 이미지 참고)
+![이미지]({{ site.url }}/images/springboot패키지.png)
 ###### 그런 뒤에 Application이라는 Java Class 파일을 만들어 준 뒤 아래와 같이 소스를 추가한다.
 
 ```java
