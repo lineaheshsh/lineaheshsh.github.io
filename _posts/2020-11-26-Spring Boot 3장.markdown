@@ -277,3 +277,192 @@ public class PostsSaveRequestDto {
 }
 
 ```
+
+###### 등록 기능의 코드가 완성되었으니, 테스트 코드로 검증해 보자. 테스트 패키지 중 web 패키지에 PostsApiControllerTest를 생성한다.
+
+```java
+package com.zzangho.project.springboot.web;
+
+import com.zzangho.project.springboot.domain.posts.Posts;
+import com.zzangho.project.springboot.domain.posts.PostsRepository;
+import com.zzangho.project.springboot.web.dto.PostsSaveRequestDto;
+import com.zzangho.project.springboot.web.dto.PostsUpdateRequestDto;
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) // 랜덤포트 실행
+public class PostsApiControllerTest {
+
+    @LocalServerPort
+    private int port;
+
+    // @WebMvcTest를 사용하지 않은 이유는 JPA 기능이 작동하지 않기 때문
+    // JPA 기능까지 한번에 테스트할 때는 @SpringBootTest와 TestRestTemplate를 사용하면 된다.
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Autowired
+    private PostsRepository postsRepository;
+
+    @After
+    public void tearDown() throws Exception {
+        postsRepository.deleteAll();
+    }
+
+    @Test
+    public void Posts_등록된다() throws Exception {
+        //given
+        String title = "title";
+        String content = "content";
+        PostsSaveRequestDto requestDto = PostsSaveRequestDto.builder()
+                                                            .title(title)
+                                                            .content(content)
+                                                            .author("author")
+                                                            .build();
+
+        String url = "http://localhost:" + port + "/api/v1/posts";
+
+        //when
+        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, requestDto, Long.class);
+
+        //then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isGreaterThan(0L);
+
+        List<Posts> all = postsRepository.findAll();
+        assertThat(all.get(0).getTitle()).isEqualTo(title);
+        assertThat(all.get(0).getContent()).isEqualTo(content);
+    }
+}
+
+```
+
+###### Api Controller를 테스트하는데 HelloController와 달리 @WebMvcTest를 사용하지 않는 이유는 @WebMvcTest의 경우 JPA 기능이 작동하지 않기 때문이라고 한다. Controller와 ControllerAdvice 등 외부 연동과 관련된 부분만 활성화되니 지금 같이 JPA 기능까지 한번에 테스트할 때는 @SpringBootTest와 TestRestTemplate를 사용하면 된다. 테스트를 수행해보면 성공하는 것을 확인할 수 있다.
+
+
+![이미지]({{ site.url }}/images/3장JPA등록.png)
+
+######  WebEnvironment.RANDOM_PORT로 인한 랜덤 포트 실행과 insert 쿼리가 실행된 것을 확인했다. 등록 기능을 완성했으니 수정/조회 기능도 만들어 보자  
+```java
+@RequiredArgsConstructor
+@RestController
+public class PostsApiController {
+
+    ...
+
+    @PutMapping("/api/v1/posts/{id}")
+    public Long update(@PathVariable Long id, @RequestBody PostsUpdateRequestDto requestDto) {
+        return postsService.update(id, requestDto);
+    }
+
+    @GetMapping("/api/v1/posts/{id}")
+    public PostsResponseDto findById(@PathVariable Long id) {
+        return postsService.findById(id);
+    }
+
+}
+
+```
+---
+```java
+package com.zzangho.project.springboot.web.dto;
+
+import com.zzangho.project.springboot.domain.posts.Posts;
+import lombok.Getter;
+
+@Getter
+public class PostsResponseDto {
+    private Long id;
+    private String title;
+    private String content;
+    private String author;
+
+    public PostsResponseDto(Posts entity) {
+        this.id = entity.getId();
+        this.title = entity.getTitle();
+        this.content = entity.getContent();
+        this.author = entity.getAuthor();
+    }
+}
+
+```
+---
+```java
+package com.zzangho.project.springboot.web.dto;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+public class PostsUpdateRequestDto {
+    private String title;
+    private String content;
+
+    @Builder
+    public PostsUpdateRequestDto(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+}
+
+```
+---
+```java
+public class Posts {
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+}
+```
+---
+```java
+@RequiredArgsConstructor
+@Service
+public class PostsService {
+    ...
+
+    @Transactional
+    public Long update(Long id, PostsUpdateRequestDto requestDto) {
+        Posts posts = postsRepository.findById(id)
+                                     .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습닏. id=" + id));
+
+        posts.update(requestDto.getTitle(), requestDto.getContent());
+
+        return id;
+    }
+
+    public PostsResponseDto findById(Long id) {
+        Posts entity = postsRepository.findById(id)
+                                      .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+
+        return new PostsResponseDto(entity);
+    }
+}
+
+```
+
+###### 여기서 신기한 것이 있다. update 기능에서 데이터베이스에 쿼리를 날리는 부분이 없지만 이게 가능한 이유는 "JPA"의 "영속성 컨텍스트" 때문이다.
+###### 영속성 컨텍스트란, `엔티티를 영구 저장하는 환경`이라고 한다. 일종의 논리적 개념이라고 보면 되고, JPA의 핵심 내용은 엔티티가 영속성 컨텍스트에 포함되어 있냐 아니냐로 갈린다.  
+###### JPA의 엔티티 매니저가 활성화된 상태로(Spring Data Jpa를 쓴다면 기본 옵션) 트랜잭션 안에서 데이터베이스에서 데이터를 가져오면 이 데이터는 영속성 컨텍스트가 유지된 상태이다.  
+###### 이 상태에서 해당 데이터의 값을 변경하면 트랜잭션이 끝나는 시점에 해당 테이블에 변경분을 반영한다. 즉, Entity 객체의 값만 변경하면 별도로 Update 쿼리를 날릴 필요가 없다는 것이다. 이 개념을 `더티 체킹`이라 한다.
+
+
