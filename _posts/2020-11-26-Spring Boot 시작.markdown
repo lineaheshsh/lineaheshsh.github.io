@@ -10,8 +10,14 @@ image:
 tags:   Spring Boot, Spring, Gradle
 ---
 
-### 스프링 부트 시작(Gradle)
+### 스프링 부트 시작(Gradle)  
 
+#### 이 글은 "스프링 부트와 AWS로 혼자 구현하는 웹 서비스" 책을 기반으로 작성하고 있습니다.  
+#### 필자의 경우 Spring Tool을 STS만 쓰다가 인텔리제이가 좋다고 하여 한번 써보고 싶어 이번 프로젝트는 인텔리제이로 진행을 하게 되었습니다.  
+
+##### 해당 프로젝트의 경우 Spring Initializr로 생성하지 않고 빈 프로젝트를 만들어 하나하나씩 만들어 가는 과정입니다.  
+
+###### 먼저 "New Project -> Gradle" 프로젝트를 만듭니다. 그 뒤에 아래와 같이 build.gradle 파일을 정의 합니다.
 
 #### build.gradle 파일 정의
 ```java
