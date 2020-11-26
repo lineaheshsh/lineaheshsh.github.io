@@ -154,5 +154,10 @@ public class PostsRepositoryTest {
 
 ###### 옵션은 다음과 같다.
 ```properties
-    spring.jpa.show_sql=true
+spring.jpa.show_sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect   // MySQL 버전으로 쿼리 로그 변경
 ```
+
+###### 그럼 다음과 같이 콘솔에서 쿼리 로그를 확인 할 수 있다.  
+
+![이미지]({{ site.url }}/images/3장_쿼리실행결과.png)
