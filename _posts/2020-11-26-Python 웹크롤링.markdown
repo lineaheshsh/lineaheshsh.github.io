@@ -15,9 +15,9 @@ tags:   파이썬, Python, Crawling
 ### 파이썬의 경우 필자도 처음 써보는 것이라 구글링을 통해 소스를 만들었다.
 
 #### 첫번째로 파이썬으로 수집을 할 수 있는 방법을 찾아보자
-> 구글에 "파이썬 웹크롤링"이라는 키워드로 검색을 해보면 몇가지의 방법이 나온다.  
-+ 첫번째로 request, BeautifulSoup 라이브러리를 이용하는 방법
-+ 두번째로 seleninum, BeautifulSoup 라이브러리를 이용하는 방법
+##### 구글에 "파이썬 웹크롤링"이라는 키워드로 검색을 해보면 몇가지의 방법이 나온다.  
++ request, BeautifulSoup 라이브러리를 이용하는 방법
++ seleninum, BeautifulSoup 라이브러리를 이용하는 방법
 
 ##### BeautifulSoup의 경우 텍스트를 HTML로 바꿔주는 역활을 하며 소스를 긁어오는 부분에서 request
 
