@@ -1,10 +1,11 @@
 ---
 layout: post
+title: Python 웹크롤링
 summary: 열심히 기록하자!
 author: Lee Chang Ho
-date: '2020-11-25 09:41:00 +0900'
+date: '2020-11-26 10:49:00'
 category: 프로젝트
-tags:   Python
+published: true
 ---
 
 ### 첫번째로 Python을 이용하여 데이터를 수집할 것이다. 대상은 네이버 뉴스로 정하였다.
