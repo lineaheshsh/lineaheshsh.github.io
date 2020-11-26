@@ -221,7 +221,7 @@ public class PostsApiController {
 
 }
 ```
-
+---
 ```java
    package com.zzangho.project.springboot.service.posts;
 
@@ -244,7 +244,7 @@ public class PostsService {
 }
 
 ```
-
+---
 ```java
 package com.zzangho.project.springboot.web.dto;
 
