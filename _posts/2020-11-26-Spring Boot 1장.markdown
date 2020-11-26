@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Spring Boot 시작
+title: Spring Boot 1장
 summary: 열심히 기록하자!
 author: Lee Chang Ho
 date: '2020-11-26 14:28:00'
@@ -19,7 +19,8 @@ tags:   Spring Boot, Spring, Gradle
 
 ##### 해당 프로젝트의 경우 Spring Initializr로 생성하지 않고 빈 프로젝트를 만들어 하나하나씩 만들어 가는 과정입니다.  
 
-###### 먼저 "New Project -> Gradle" 프로젝트를 만듭니다. 그 뒤에 아래와 같이 build.gradle 파일을 정의 합니다.
+###### 1장의 경우 gradle 파일 설정, git 연동, 메인 클래스 작성 이렇게 이루어 져있고 해당 블로그에서는 gradle파일 설정, 메인 클래스 작성에 대해 다루어 본다.  
+###### 먼저 "New Project -> Gradle" 프로젝트를 만듭니다. 그 뒤에 아래와 같이 build.gradle 파일을 정의 합니다.  
 
 #### build.gradle 파일 정의
 ```java
@@ -57,9 +58,9 @@ dependencies {
 
 ```
 
-###### 그 뒤에 src/main/java 경로 밑에 패키지를 하나 만들어준다. 필자의 경우 처음에 GroupID를 com.zzangho.project라고 지었기 때문에 com.zzangho.project.springboot라고 새로운 패키지를 하나 만들어 주었다. (아래 이미지 참고)
+###### 그 뒤에 src/main/java 경로 밑에 패키지를 하나 만들어준다. 필자의 경우 처음에 GroupID를 com.zzangho.project라고 지었기 때문에 com.zzangho.project.springboot라고 새로운 패키지를 하나 만들어 주었다. (아래 이미지 참고)  
 ![이미지]({{ site.url }}/images/springboot패키지.png)
-###### 그런 뒤에 Application이라는 Java Class 파일을 만들어 준 뒤 아래와 같이 소스를 추가한다.
+###### 그런 뒤에 Application이라는 Java Class 파일을 만들어 준 뒤 아래와 같이 소스를 추가한다.  
 
 ```java
 package com.zzangho.project.springboot;
