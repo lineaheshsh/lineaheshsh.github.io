@@ -78,3 +78,5 @@ public class Application {
 }
 
 ```
+
+###### 이로써 gradle 셋팅 및 메인클래스 작성이 완료되었다. 다음 단계는 JUnit을 이용한 테스트 방법에 대해 다루어 보자.
