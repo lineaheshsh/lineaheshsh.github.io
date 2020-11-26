@@ -466,3 +466,62 @@ public class PostsService {
 ###### 이 상태에서 해당 데이터의 값을 변경하면 트랜잭션이 끝나는 시점에 해당 테이블에 변경분을 반영한다. 즉, Entity 객체의 값만 변경하면 별도로 Update 쿼리를 날릴 필요가 없다는 것이다. 이 개념을 `더티 체킹`이라 한다.
 
 
+---
+###### 다음으론 JPA Auditing으로 생성시간/수정시간 자동화하기를 해보자  
+###### 보통 엔티티에는 해당 데이터의 생성시간과 수정시간을 포함한다. 언제 만들어졌는지, 언제 수정되었는지 등은 차후 유지보수에 있어 굉장히 중요한 정보이기 때문이다. 그렇다 보니 매번 DB에 삽입하기 전, 갱신 하기 전에 날짜 데이터를 등록/수정ㅈ하는 코드가 여기저기 들어가게 된다. 이런 단순하고 반복적인 코드가 모든 테이블과 서비스 메소드에 포함되어야 한다고 생각하면 어마어마하게 귀찮고 코드가 지저분해진다. 그래서 이 문제를 해결 하고자 JPA Auditing를 사용하자.
+
+###### * Java 8부터는 기존 날짜 타입인 Date의 문제 점을 고친 LocalDate, LocalDateTime 타입을 사용하자. domain 패키지에 BaseTimeEntity 클래스를 생성하자.
+
+```java
+package com.zzangho.project.springboot.domain;
+
+import lombok.Getter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.EntityListeners;
+import javax.persistence.MappedSuperclass;
+import java.time.LocalDateTime;
+
+@Getter
+@MappedSuperclass   // JPA Entity 클래스들이 BaseTimeEntity를 상속할 경우 필드들(createdDate, modifiedDate)도 칼럼으로 인식하도록 한다.
+@EntityListeners(AuditingEntityListener.class)  // BaseTimeEntity 클래스에 Auditing 기능을 포함
+public class BaseTimeEntity {
+
+    // Entity가 생성되어 저장될 때 시간이 자동 저장됨
+    @CreatedDate
+    private LocalDateTime createdDate;
+
+    // 조회한 Entity의 값을 변경할 때 시간이 자동 저장됨
+    @LastModifiedDate
+    private LocalDateTime modifiedDate;
+}
+
+```
+
+###### 그 다음 Posts 클래스가 BaseTimeEntity를 상속받도록 변경한다.  
+```java
+public class Posts extends BaseTimeEntity {
+    ...
+}
+```
+
+###### 마지막으로 JPA Auditing 어노테이션들을 모두 활성화할 수 있도록 Application 클래스에 활성화 어노테이션 하나를 추가하자.
+```java
+package com.zzangho.project.springboot;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
+@EnableJpaAuditing // JPA Auditing 활성화
+// 아래 어노테이션으로 인해 스프링 부트의 자동 설정, 스프링 Bean 읽기와 생성을 모두 자동으로 설정 됨
+// 특히나 @SpringBootApplication이 있는 위치부터 설정을 읽어가기 때문에 이 클래스는 항상 프로젝트의 최상단에 위치해야만 함
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args); // 내장 WAS 실행
+    }
+}
+```
