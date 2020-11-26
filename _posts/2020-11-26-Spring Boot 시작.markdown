@@ -6,7 +6,7 @@ author: Lee Chang Ho
 date: '2020-11-26 14:28:00'
 category: 프로젝트
 published: true
-image:  
+image:  스프링부트.png
 tags:   Spring Boot, Spring, Gradle
 ---
 
