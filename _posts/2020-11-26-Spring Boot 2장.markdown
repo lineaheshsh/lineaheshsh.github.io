@@ -92,3 +92,19 @@ public class HelloControllerTest {
 ![이미지]({{ site.url }}/images/테스트코드1번.png)
 ###### 그럼 다음과 같이 테스트가 통과하는 것을 확인할 수 있다.  
 ![이미지]({{ site.url }}/images/테스트코드1번결과.png)
+
+
+---
+###### 다음으로는 롬복(Lombok)을 설치 해보자 build.gradle에 다음과 같이 추가한다.
+
+```java
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.projectlombok:lombok') // Lombok 의존성 등록
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+```
+
+###### 다음으로 Marketplace 탭으로 이동하여 "lombok"을 검색하여 install을 한다.  
+###### 마지막으로 [Setting -> Build -> Compiler -> Annotation Processor]에 들어가 "Enable annotaion processing"을 체크한다.
