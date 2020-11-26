@@ -7,7 +7,7 @@ date: '2020-11-26 17:28:00'
 category: 프로젝트
 published: true
 image:  스프링부트.png
-tags:   Spring Boot, Spring, Gradle, JPA
+tags:   SpringBoot Spring Gradle JPA
 ---
 
 ### 스프링 부트 3장(JPA)  
