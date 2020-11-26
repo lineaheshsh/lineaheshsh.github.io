@@ -6,6 +6,8 @@ author: Lee Chang Ho
 date: '2020-11-26 10:49:00'
 category: 프로젝트
 published: true
+image:  파이썬.png
+tags:   Jekyll
 ---
 
 ### 첫번째로 Python을 이용하여 데이터를 수집할 것이다. 대상은 네이버 뉴스로 정하였다.
