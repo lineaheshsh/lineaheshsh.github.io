@@ -195,3 +195,85 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialec
     - @Entity를 사용해보신 분들은 @Entity가 사용된 영역 역시 도메인 모델이라고 이해해주시면 됩니다.
     - 다만 무조건 데이터베이스의 테이블과 관계가 있어야만 하는 것은 아닙니다.
     - VO처럼 값 객체들도 이 영역에 해당하기 때문입니다.
+    
+    
+###### 그럼 등록, 수정, 삭제 기능을 만들어 보자. PostsApiController를 web 패키지에, PostsSaveRequestDto를 web.dto 패키지에, PostsService를 service.posts 패키지에 생성한다.
+
+```java
+package com.zzangho.project.springboot.web;
+
+import com.zzangho.project.springboot.service.posts.PostsService;
+import com.zzangho.project.springboot.web.dto.PostsSaveRequestDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+@RequiredArgsConstructor
+@RestController
+public class PostsApiController {
+    // @Autowired를 안쓰는 이유는 생성자로 Bean 객체를 받도록 하기 위함.
+    // 롬복의 @RequiredArgsConstructor 어노테이션이 "final"이 선언된 모든 필드를 인자값으로 하는 생성자를 대신 생성해준다.
+    private final PostsService postsService;
+
+    @PostMapping("/api/v1/posts")
+    public Long save(@RequestBody PostsSaveRequestDto requestDto) {
+        return postsService.save(requestDto);
+    }
+
+}
+```
+
+```java
+   package com.zzangho.project.springboot.service.posts;
+
+import com.zzangho.project.springboot.domain.posts.Posts;
+import com.zzangho.project.springboot.domain.posts.PostsRepository;
+import com.zzangho.project.springboot.web.dto.PostsSaveRequestDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@RequiredArgsConstructor
+@Service
+public class PostsService {
+    private final PostsRepository postsRepository;
+
+    @Transactional
+    public Long save(PostsSaveRequestDto requestDto) {
+        return postsRepository.save(requestDto.toEntity()).getId();
+    }
+}
+
+```
+
+```java
+package com.zzangho.project.springboot.web.dto;
+
+import com.zzangho.project.springboot.domain.posts.Posts;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+public class PostsSaveRequestDto {
+    private String title;
+    private String content;
+    private String author;
+
+    @Builder
+    public PostsSaveRequestDto(String title, String content, String author) {
+        this.title = title;
+        this.content = content;
+        this.author = author;
+    }
+
+    public Posts toEntity() {
+        return Posts.builder()
+                .title(title)
+                .content(content)
+                .author(author)
+                .build();
+    }
+}
+
+```
