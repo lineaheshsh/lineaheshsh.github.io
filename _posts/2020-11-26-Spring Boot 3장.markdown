@@ -160,4 +160,4 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialec
 
 ###### 그럼 다음과 같이 콘솔에서 쿼리 로그를 확인 할 수 있다.  
 
-![이미지]({{ site.url }}/images/3장_쿼리실행결과.png)
+![이미지]({{ site.url }}/images/3장쿼리실행결과.png)
