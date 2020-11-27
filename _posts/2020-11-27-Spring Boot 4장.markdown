@@ -50,9 +50,9 @@ compile('org.springframework.boot:spring-boot-starter-mustache')
 ```
 
 ###### 보는 것 처럼 머스테치는 `스프링 부트에서 공식 지원하는 템플릿 엔진`이다.  
-###### 머스테치의 파일 위치는 기본적으로 __src/main/resources/templates__이다.  
+###### 머스테치의 파일 위치는 기본적으로 `src/main/resources/templates`이다.  
 ###### 이 위치에 머스테치 파일을 두면 스프링 부트에서 자동으로 로딩한다.  
-###### 첫페이지를 담당할 index.mustache를 생성해보자 위치는 __src/main/resources/template에 생성한다.
+###### 첫페이지를 담당할 index.mustache를 생성해보자 위치는 `src/main/resources/template`에 생성한다.
 
 ```html
 <!DOCTYPE HTML>
@@ -86,7 +86,7 @@ public class IndexController {
 
 ```
 
-###### 머스테치 스타터 덕분에 컨트롤러에서 문자열을 반환할 때 `앞의 경로와 뒤의 파일 확장자는 자동으로 지정`된다. 앞의 경로는 __src/main/resources/templates__로, 뒤의 파일 확장자는 __.mustache__가 붙는 것이다.  
+###### 머스테치 스타터 덕분에 컨트롤러에서 문자열을 반환할 때 `앞의 경로와 뒤의 파일 확장자는 자동으로 지정`된다. 앞의 경로는 `src/main/resources/templates`로, 뒤의 파일 확장자는 `.mustache`가 붙는 것이다.  
 
 ###### 자 여기까지 코드가 완성됬으면 테스트 코드로 검증해 보자. test 패키지에 IndexControllerTest 클래스를 만든다.  
 
@@ -131,4 +131,151 @@ public class IndexControllerTest {
 ---
 ###### 첫번째로는 게시글 등록 화면을 만들어보자.  
 ###### 여기서는 오픈소스인 부트스트랩, 제이쿼리를 CDN 형식으로 사용하여 화면을 만들고 있다.
-###### 2개의 라이브러리를 index.mustache에 추가해야 한다. 하지만 , 여기서는 바로 추가하지 않고 __레이아웃__ 방식으로 추가를 한다. 레이아웃 방식이란 __공통 영역을 별도의 파일로 분리하여 필요한 곳에서 가져다 쓰는 방식__을 이야기 한다.  
+###### 2개의 라이브러리를 index.mustache에 추가해야 한다. 하지만 , 여기서는 바로 추가하지 않고 `레이아웃` 방식으로 추가를 한다. 레이아웃 방식이란 `공통 영역을 별도의 파일로 분리하여 필요한 곳에서 가져다 쓰는 방식`을 이야기 한다.  
+###### 이번에 추가할 라이브러리들인 부트스트랩과 제이쿼리는 머스테치 화면 어디서나 필요하다. 매번 해당 라이브러리를 머스테치 파일에 추가하는 것은 귀찮은 일이니, 레이아웃 파일들을 만들어 추가한다.  
+###### src/main/resources/templates 디렉토리에 layout 디렉토리를 추가하고 footer.mustache,header.mustache 파일을 생성한다.
+
+```html
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>스프링 부트 웹서비스</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    <link rel="stylesheet" href="http://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+```
+---
+```html
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<!-- index.js 추가 -->
+<script src="/js/app/index.js"></script>
+</body>
+</html>
+```
+
+###### 코드를 보면 css와 js의 위치가 서로 다른것을 볼 수있다. `페이지 로딩속도를 높이기 위해` css는 header에, js는 footer에 두었다. HTML은 위에서부터 코드가 실행되기 때문에 head가 다 실행되고서야 body가 실행된다.  
+###### 즉, head가 다 불러지지 않으면 사용자 쪽에선 백지 화면만 노출이된다. 특히 js의 용량이 크면 클수록 body 부분의 실행이 늦어지기 때문에 js는 body 하단에 두어 화면이 다 그려진 뒤에 호출하는 것이 좋다.  
+
+###### 이제 index.mustache의 코드를 다음과 같이 변경해보자.
+```html
+{{>layout/header}}
+    <h1>스프링 부트로 시작하는 웹 서비스</h1>
+{{>layout/footer}}
+```
+
+###### 레이아웃으로 파일을 분리했으니 index.mustache에 글 등록 버튼을 추가해 보자.
+```html
+{{>layout/header}}
+    <h1>스프링 부트로 시작하는 웹 서비스</h1>
+
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-6">
+                <a href="/posts/save" role="button" class="btn btn-primary">글 등록</a>
+            </div>
+        </div>
+    </div>
+{{>layout/footer}}
+```
+
+###### 이동할 페이지의 주소는 /posts/save이다.  
+###### 이 주소에 해당하는 컨트롤러를 생성해보자. 페이지와 관련된 컨트롤러는 모두 IndexController를 사용하자.  
+
+```java
+@RequiredArgsConstructor
+@Controller
+public class IndexController {
+    ...
+    
+    @GetMapping("/posts/save")
+    public String postsSave() {
+        return "posts-save";
+    }
+```
+
+###### 이제 posts-save 페이지를 만들어보자
+```html
+{{>layout/header}}
+<h1>게시글 등록</h1>
+
+<div class="col-md-12">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" class="form-control" id="title" placeholder="제목을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label for="author">작성자</label>
+                <input type="text" class="form-control" id="author" placeholder="작성자를 입력하세요">
+            </div>
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea type="text" class="form-control" id="content" placeholder="내용을 입력하세요"></textarea>
+            </div>
+        </form>
+        <a href="/" role="button" class="btn btn-secodnary">취소</a>
+        <button type="button" class="btn btn-primary" id="btn-save">등록</button>
+    </div>
+</div>
+{{>layout/footer}}
+```
+
+###### UI가 완성되었으니 다시 프로젝트를 실행하여 브라우저에서 http://localhost:8080/로 접근하여 '글 등록'이라고 되어있는 버튼을 클릭해보자. 아래와 같이 페이지가 열릴 것이다.  
+![이미지]({{ site.url }}/images/4장게시글등록.png)
+
+###### 하지만 아직 게시글 등록 화면에 `등록 버튼 기능이 없다.` API를 호출하는 JS가 전혀 없기 때문이다. 그래서 src/main/resources에 static/js/app 디렉토리를 생성하자.  
+###### 여기에 index.js를 생성한다. 코드는 다음과 같다.
+
+```javascript
+var main = {
+    init : function () {
+        var _this = this;
+        
+        // 등록 버튼 초기화
+        $('#btn-save').on('click', function () {
+            _this.save();
+        });
+    },
+    save : function () {
+        var data = {
+            title: $('#title').val(),
+            author: $('#author').val(),
+            content: $('#content').val()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/v1/posts',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function() {
+            alert('글이 등록되었습니다.');
+            window.location.href = '/';
+        }).fail(function (error) {
+            alert(JSON.stringify(error))
+        });
+    }
+};
+
+main.init();
+```
+
+###### 자 그럼 생성된 index.js를 머스테치 파일이 쓸 수 있게 footer.mustache에 추가해 보자
+```html
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<!-- index.js 추가 -->
+<script src="/js/app/index.js"></script>
+</body>
+</html>
+```
+
+###### index.js 호출 코드를 보면 `절대 경로`(/)로 바로 시작한다. 스프링 부트는 기본적으로 src/main/resources/static에 위치한 자바스크립트, CSS, 이미지 등 정적 파일들은 URL에서 /로 설정된다.
+
