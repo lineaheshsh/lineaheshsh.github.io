@@ -1,7 +1,4 @@
 ---
-published: false
----
----
 layout: post
 title: Spring Boot 4장
 summary: 열심히 기록하자!
