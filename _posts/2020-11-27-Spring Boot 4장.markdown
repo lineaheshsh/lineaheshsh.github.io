@@ -312,6 +312,233 @@ main.init();
             {{#posts}}
                 <tr>
                     <td>{{id}}</td>
+                    <td>{{title}}</td>
+                    <td>{{author}}</td>
+                    <td>{{modifiedDate}}</td>
+                </tr>
+            {{/posts}}
+            </tbody>
+        </table>
+    </div>
+{{>layout/footer}}
+```
+
+###### 그럼 Controller, Service, REpository 코드를 작성해보자. 먼저 Repository부터 시작한다.  
+###### 기존에 있던 PostsRespository 인터페이스에 쿼리가 추가된다.
+
+```java
+package com.zzangho.project.springboot.domain.posts;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
+
+public interface PostsRepository extends JpaRepository<Posts,Long> {
+
+    @Query("SELECT p FROM Posts p ORDER BY p.id DESC")
+    List<Posts> findAllDesc();
+}
+
+```
+
+###### Repository 다음으로는 PostsService에 코드를 추가하자.
+
+```java
+package com.zzangho.project.springboot.service.posts;
+
+import com.zzangho.project.springboot.domain.posts.Posts;
+import com.zzangho.project.springboot.domain.posts.PostsRepository;
+import com.zzangho.project.springboot.web.dto.PostsListResponseDto;
+import com.zzangho.project.springboot.web.dto.PostsResponseDto;
+import com.zzangho.project.springboot.web.dto.PostsSaveRequestDto;
+import com.zzangho.project.springboot.web.dto.PostsUpdateRequestDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+@RequiredArgsConstructor
+@Service
+public class PostsService {
+    private final PostsRepository postsRepository;
+
+   ...
+   
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findAllDesc() {
+        return postsRepository.findAllDesc().stream()
+                                            .map(PostsListResponseDto::new)
+                                            .collect(Collectors.toList());
+    }
+}
+
+```
+
+###### findAllDesc 메소드의 트랜잭션 어노테이션(@Transactional)에 옵션이 하나 추가되었다. (readOnly = true)를 주면 `트랜잭션 범위는 유지`하되, 조회 기능만 남겨두어 `조회 속도가 개선`되기 때문에 등록,수정,삭제 기능이 전혀 없는 서비스 메소드에서 사용할 것을 추천한다.  
+###### 그리고 PostsListResponseDto 클래스가 없기 때문에 생성해주자  
+
+```java
+package com.zzangho.project.springboot.web.dto;
+
+import com.zzangho.project.springboot.domain.posts.Posts;
+import lombok.Getter;
+
+import java.time.LocalDateTime;
+
+@Getter
+public class PostsListResponseDto {
+    private Long id;
+    private String title;
+    private String author;
+    private LocalDateTime modifiedDate;
+
+    public PostsListResponseDto(Posts entity) {
+        this.id = entity.getId();
+        this.title = entity.getTitle();
+        this.author = entity.getAuthor();
+        this.modifiedDate = entity.getModifiedDate();
+    }
+}
+
+```
+
+###### 마지막으로 Controller를 변경해보자
+```java
+package com.zzangho.project.springboot.web;
+
+import com.zzangho.project.springboot.service.posts.PostsService;
+import com.zzangho.project.springboot.web.dto.PostsResponseDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+@RequiredArgsConstructor
+@Controller
+public class IndexController {
+
+    private final PostsService postsService;
+
+    @GetMapping("/")
+    public String index(Model model) {
+        model.addAttribute("posts", postsService.findAllDesc());
+        return "index";
+    }
+}
+
+```
+
+###### 다시 접속해보면 조회 목록기능이 정상적으로 되는 것을 확인 할 수 있다.  
+![이미지]({{ site.url }}/images/4장게시글조회.png)
+
+###### 이제 수정, 삭제 로직을 만들어 보자
+
+###### 먼저 posts-update.mustache 파일을 생성해준다.
+```
+{{>layout/header}}
+<h1>게시글 수정</h1>
+
+<div class="col-md-12">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="id">글 번호</label>
+                <input type="text" class="form-control" id="id" value="{{post.id}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" class="form-control" id="title" value="{{post.title}}">
+            </div>
+            <div class="form-group">
+                <label for="author">작성자</label>
+                <input type="text" class="form-control" id="author" value="{{post.author}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea type="text" class="form-control" id="content">{{post.content}}</textarea>
+            </div>
+        </form>
+        <a href="/" role="button" class="btn btn-secodnary">취소</a>
+        <button type="button" class="btn btn-primary" id="btn-update">수정</button>
+        <button type="button" class="btn btn-danger" id="btn-delete">삭제</button>
+    </div>
+</div>
+{{>layout/footer}}
+```
+
+###### 그리고 btn-update 버튼을 클릭하면 update 기능을 호출할 수 있게 index.js 파일에도 update fuction을 하나 추가해준다.
+```javascript
+var main = {
+    init : function () {
+        var _this = this;
+        
+        ...
+
+        // 수정 버튼 초기화
+        $('#btn-update').on('click', function () {
+            _this.update();
+        });
+    },
+    save : function () {
+        ...
+    },
+    update : function () {
+        var data = {
+            title: $('#title').val(),
+            content: $('#content').val()
+        };
+
+        var id = $('#id').val();
+
+        $.ajax({
+            type: 'PUT',
+            url: '/api/v1/posts/' + id,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function () {
+            alert('글이 수정되었습니다.');
+            window.location.href = '/';
+        }).fail(function (error) {
+            alert(JSON.stringify(error))
+        });
+    }
+};
+
+main.init();
+```
+
+###### 마지막으로 전체 목록에서 `수정 페이지로 이동할 수 있게` 페이지 이동 기능을 추가해 보자. index.mustache 코드를 다음과 같이 '살짝' 수정한다.
+```
+{{>layout/header}}
+    <h1>스프링 부트로 시작하는 웹 서비스</h1>
+
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-6">
+                <a href="/posts/save" role="button" class="btn btn-primary">글 등록</a>
+            </div>
+        </div>
+        <br>
+        <!-- 목록 출력 영역 -->
+        <table class="table table-horizontal table-bordered">
+            <thead class="thead-strong">
+            <tr>
+                <th>게시글번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>최종수정일</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            {{#posts}}
+                <tr>
+                    <td>{{id}}</td>
                     <td><a href="/posts/update/{{id}}">{{title}}</a></td>
                     <td>{{author}}</td>
                     <td>{{modifiedDate}}</td>
@@ -322,3 +549,133 @@ main.init();
     </div>
 {{>layout/footer}}
 ```
+
+###### 화면쪽 작업이 다 끝났으니 수정 화면을 연결할 Controller 코드를 작업 하자. IndexController에 다음과 같이 메소드를 추가한다.
+```java
+package com.zzangho.project.springboot.web;
+
+import com.zzangho.project.springboot.service.posts.PostsService;
+import com.zzangho.project.springboot.web.dto.PostsResponseDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+@RequiredArgsConstructor
+@Controller
+public class IndexController {
+
+    private final PostsService postsService;
+
+    ...
+
+    @GetMapping("/posts/update/{id}")
+    public String postsUpdate(@PathVariable Long id, Model model) {
+        PostsResponseDto dto = postsService.findById(id);
+        model.addAttribute("post", dto);
+
+        return "posts-update";
+    }
+}
+
+```
+
+###### 실행을 해보면 아래와 같이 수정이 되었다는 Alert가 노출된다.
+![이미지]({{ site.url }}/images/4장게시글수정중.png)
+![이미지]({{ site.url }}/images/4장게시글수정완료.png)
+
+###### 수정 기능이 정상적으로 구현되었으니, 삭제 기능도 구현해 보자. 삭제 버튼은 수정 화면에 추가하도록 하자.
+```
+{{>layout/header}}
+<h1>게시글 수정</h1>
+
+<div class="col-md-12">
+    <div class="col-md-4">
+        ...
+        <a href="/" role="button" class="btn btn-secodnary">취소</a>
+        <button type="button" class="btn btn-primary" id="btn-update">수정</button>
+        <button type="button" class="btn btn-danger" id="btn-delete">삭제</button>
+    </div>
+</div>
+{{>layout/footer}}
+```
+
+###### 삭제 이벤트를 진행할 JS 코드도 추가하자
+```javascript
+var main = {
+    init : function () {
+        var _this = this;
+        
+        ...
+
+        // 삭제 버튼 초기화
+        $('#btn-delete').on('click', function () {
+            _this.delete();
+        });
+    },
+    ...
+    delete : function () {
+        var id = $('#id').val();
+
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/v1/posts/' + id,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        }).done(function () {
+            alert('글이 삭제되었습니다.');
+            window.location.href = '/';
+        }).fail(function (error) {
+            alert(JSON.stringify(error))
+        });
+    }
+};
+
+main.init();
+```
+
+###### 자 이제 삭제 API를 만들어보자. 먼저 서비스 메소드이다.
+```java
+@RequiredArgsConstructor
+@Service
+public class PostsService {
+    ...
+    
+    @Transactional
+    public void delete (Long id) {
+        Posts posts = postsRepository.findById(id)
+                                     .orElseThrow(() ->new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+
+        postsRepository.delete(posts);
+    }
+}
+```
+
+###### 다음은 Controller이다.
+```java
+package com.zzangho.project.springboot.web;
+
+import com.zzangho.project.springboot.service.posts.PostsService;
+import com.zzangho.project.springboot.web.dto.PostsResponseDto;
+import com.zzangho.project.springboot.web.dto.PostsSaveRequestDto;
+import com.zzangho.project.springboot.web.dto.PostsUpdateRequestDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+@RequiredArgsConstructor
+@RestController
+public class PostsApiController {
+    ...
+
+    @DeleteMapping("/api/v1/posts/{id}")
+    public Long delete(@PathVariable Long id) {
+        postsService.delete(id);
+        return id;
+    }
+
+}
+
+```
+###### 실행을 해보면 아래와 같이 삭제가 정상적으로 된다.
+![이미지]({{ site.url }}/images/4장게시글삭제완료.png)
