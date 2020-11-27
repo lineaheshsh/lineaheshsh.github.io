@@ -161,7 +161,7 @@ public class IndexControllerTest {
 ###### 즉, head가 다 불러지지 않으면 사용자 쪽에선 백지 화면만 노출이된다. 특히 js의 용량이 크면 클수록 body 부분의 실행이 늦어지기 때문에 js는 body 하단에 두어 화면이 다 그려진 뒤에 호출하는 것이 좋다.  
 
 ###### 이제 index.mustache의 코드를 다음과 같이 변경해보자.
-```html
+```mustache
 {{>layout/header}}
     <h1>스프링 부트로 시작하는 웹 서비스</h1>
 {{>layout/footer}}
@@ -279,3 +279,10 @@ main.init();
 
 ###### index.js 호출 코드를 보면 `절대 경로`(/)로 바로 시작한다. 스프링 부트는 기본적으로 src/main/resources/static에 위치한 자바스크립트, CSS, 이미지 등 정적 파일들은 URL에서 /로 설정된다.
 
+###### 모든 코드가 완성되었다. 등록 기능을 브라우저에서 직접 테스트 해보자.  
+![이미지]({{ site.url }}/images/4장게시글등록중.png)
+###### 등록 버튼을 클릭하면 다음과 같이 "글이 등록되었습니다"라는 Alert가 노출된다.
+![이미지]({{ site.url }}/images/4장게시글등록완료.png)
+
+###### 전체 조회 화면 만들기  
+###### 전체 조회를 위해 index.mustache의 UI를 변경해보자
