@@ -161,14 +161,14 @@ public class IndexControllerTest {
 ###### 즉, head가 다 불러지지 않으면 사용자 쪽에선 백지 화면만 노출이된다. 특히 js의 용량이 크면 클수록 body 부분의 실행이 늦어지기 때문에 js는 body 하단에 두어 화면이 다 그려진 뒤에 호출하는 것이 좋다.  
 
 ###### 이제 index.mustache의 코드를 다음과 같이 변경해보자.
-```mustache
+```
 {{>layout/header}}
     <h1>스프링 부트로 시작하는 웹 서비스</h1>
 {{>layout/footer}}
 ```
 
 ###### 레이아웃으로 파일을 분리했으니 index.mustache에 글 등록 버튼을 추가해 보자.
-```html
+```
 {{>layout/header}}
     <h1>스프링 부트로 시작하는 웹 서비스</h1>
 
@@ -198,7 +198,7 @@ public class IndexController {
 ```
 
 ###### 이제 posts-save 페이지를 만들어보자
-```html
+```
 {{>layout/header}}
 <h1>게시글 등록</h1>
 
@@ -286,3 +286,39 @@ main.init();
 
 ###### 전체 조회 화면 만들기  
 ###### 전체 조회를 위해 index.mustache의 UI를 변경해보자
+
+```
+{{>layout/header}}
+    <h1>스프링 부트로 시작하는 웹 서비스</h1>
+
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-6">
+                <a href="/posts/save" role="button" class="btn btn-primary">글 등록</a>
+            </div>
+        </div>
+        <br>
+        <!-- 목록 출력 영역 -->
+        <table class="table table-horizontal table-bordered">
+            <thead class="thead-strong">
+            <tr>
+                <th>게시글번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>최종수정일</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            {{#posts}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td><a href="/posts/update/{{id}}">{{title}}</a></td>
+                    <td>{{author}}</td>
+                    <td>{{modifiedDate}}</td>
+                </tr>
+            {{/posts}}
+            </tbody>
+        </table>
+    </div>
+{{>layout/footer}}
+```
