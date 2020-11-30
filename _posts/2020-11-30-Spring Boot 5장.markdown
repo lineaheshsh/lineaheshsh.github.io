@@ -382,6 +382,291 @@ public class SessionUser implements Serializable {
 ```
 
 ###### SessionUser에는 인증된 사용자 정보만 필요하다. 그 외에 필요한 정보들은 없으니 name, email, picture만 필드로 선언한다.  
----
+
+###### 스프링 시큐리티가 잘 적용되었는지 확인하기 위해 화면에 로그인 버튼을 추가해 보자.  
+###### index.mustache에 로그인 버튼과 로그인 성공 시 사용자 이름을 보여주는 코드이다.  
+
+```html
+    <h1>스프링 부트로 시작하는 웹 서비스</h1>
+
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-6">
+                <a href="/posts/save" role="button" class="btn btn-primary">글 등록</a>
+                \{\{\#name\}\}
+                    {{name}}
+                    <a href="/logout" class="btn btn-info active" role="button">Logout</a>
+                {{/name}}
+                {{^name}}
+                    <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
+                    <a href="/oauth2/authorization/naver" class="btn btn-secondary active" role="button">Naver Login</a>
+                {{/name}}
+            </div>
+        </div>
+        <br>
+        <!-- 목록 출력 영역 -->
+        ...
+```
+
+###### index.mustache에서 userName을 사용할 수 있게 IndexController에서 userName을 model에 저장하는 코드를 추가한다.  
+```java
+import javax.servlet.http.HttpSession;
+
+@RequiredArgsConstructor
+@Controller
+public class IndexController {
+
+    private final PostsService postsService;
+    private final HttpSession  httpSession;
+
+    @GetMapping("/")
+    public String index(Model model) {
+        model.addAttribute("posts", postsService.findAllDesc());
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        
+        if ( user != null ) {
+            System.out.println(user.getName());
+            model.addAttribute("name", user.getName());
+        }
+        return "index";
+    }
+```
+
 ###### 그럼 한번 프로젝트를 실행해서 테스트를 해보자. http://localhost:8080으로 접속을 해보면 Google Login 버튼이 보일 것이다.  
 ###### 클릭해 보면 평소 다른 서비스에서 볼 수 있던 것처럼 구글 로그인 동의 화면으로 이동하며 본인의 계정을 선택하면 로그인 과정이 진행되어 화면에 이름이 노출이 된다.  
+
+---
+
+###### 다음으로는 어노테이션 기반으로 개선하기를 해보겠다.  
+
+###### 일반적인 프로그래밍에서 개선이 필요한 나쁜 코드에는 어떤 것이 있을까?  
+###### 가장 대표적으로 같은 코드가 반복되는 부분이다.  
+###### 자 그럼 앞서 만든 코드에서 개선할만한 것은 무엇이 있을까? 바로 IndexController에서 세션값을 가져오는 부분이라고 생각한다.
+
+```java
+SessionUser user = (SessionUser) httpSession.getAttribute("user");
+```
+
+###### 그래서 이 부분을 메소드 인자로 세션값을 바로 받을 수 있도록 변경해 보자.  
+###### config.auth 패키지에 다음과 같이 @LoginUser 어노테이션을 생성한다.  
+
+```java
+package com.zzangho.project.springboot.config.auth;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+// 이 어노테이션이 생성될 수 있는 위치를 지정한다.
+// PARAMETER로 지정했으니 메소드의 파라미터로 선언된 객체에서만 사용할 수 있다.
+// 이 외에도 클래스 선언문에 쓸 수 있는 TYPE 등이 있다.
+@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface LoginUser {   //이 파일을 어노테이션 클래스로 지정한다. LoginUser라는 이름을 가진 어노테이션이 생성됬다고 보면 된다.
+}
+
+```
+
+###### 그리고 같은 위치에 LoginUserArgumentResolber를 생성한다. LoginUserArgumentResolver라는 HandlerMethodArgumentResolver 인터페이스를 구현한 클래스이다.  
+###### HandlerMethodArgumentResolver는 한가지 기능을 지원한다. 바로 조건에 맞는 경우 메소드가 있다면 HandlerMethodArgumentResolver의 구현체가 지정한 값으로 해당 메소드의 파라미터로 넘길 수 있다.  
+
+```java
+package com.zzangho.project.springboot.config.auth;
+
+import com.zzangho.project.springboot.config.auth.dto.SessionUser;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.MethodParameter;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.support.WebDataBinderFactory;
+import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.method.support.ModelAndViewContainer;
+
+import javax.servlet.http.HttpSession;
+
+@RequiredArgsConstructor
+@Component
+// HandlerMethodArgumentResolver는 조건에 맞는 경우 메소드가 있다면
+// HandlerMethodArgumentResolver의 구현체가 지정한 값으로 해당 메소드의 파라미터로 넘길 수 있다.
+public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
+
+    private final HttpSession httpSession;
+
+    // 컨트롤러 메소드의 특정 파라미터를 지원하는지 판단한다.
+    // 여기서는 파라미터에 @LoginUser 어노테이션이 붙어 있고, 파라미터 클래스 타입이 SessionUser.class인 경우 true를 반환한다.
+    @Override
+    public boolean supportsParameter(MethodParameter parameter) {
+        boolean isLoginUserAnnotation = parameter.getParameterAnnotation(LoginUser.class) != null;
+        boolean isUserClass = SessionUser.class.equals(parameter.getParameterType());
+
+        return isLoginUserAnnotation && isUserClass;
+    }
+
+    // 파라미터에 전달할 객체를 생성한다. 여기서는 세션에서 객체를 가져온다.
+    @Override
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest,
+                                  WebDataBinderFactory binderFactory) throws Exception {
+
+        return httpSession.getAttribute("user");
+    }
+}
+
+```
+
+###### @LoginUser를 사용하기 위한 환경은 구성이 되었다.  
+###### 자 이제 이렇게 생성된 LoginUserArgumentResolver가 스프링에서 인식될 수 있도록 WebMvcConfigurer에 추가하겠다. config 패키지에 WebConfig 클래스를 생성하여 다음과 같이 설정을 추가 한다.  
+
+```java
+package com.zzangho.project.springboot.config;
+
+import com.zzangho.project.springboot.config.auth.CertificationInterceptor;
+import com.zzangho.project.springboot.config.auth.LoginUserArgumentResolver;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
+
+@RequiredArgsConstructor
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+    private final LoginUserArgumentResolver loginUserArgumentResolver;
+
+    // HandlerMethodArgumentResolver는 항상 WebMvcConfigurer의 addArgumentResolvers를 통해 추가해야 한다.
+    // 다른 Handler-MethodArgumentResolver가 필요하다면 같은 방식으로 추가해 주면 된다.
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(loginUserArgumentResolver);
+    }
+}
+
+```
+
+###### 모든 설정이 끝났으니 처음 언급한 대로 IndexController의 코드에서 반복되는 부분들을 모두 @LoginUser로 개선하자.  
+
+```java
+import javax.servlet.http.HttpSession;
+
+@RequiredArgsConstructor
+@Controller
+public class IndexController {
+
+    private final PostsService postsService;
+    private final HttpSession  httpSession;
+
+    @GetMapping("/")
+    public String index(Model model, @LoginUser SessionUser user) {
+        model.addAttribute("posts", postsService.findAllDesc());
+        
+        if ( user != null ) {
+            System.out.println(user.getName());
+            model.addAttribute("name", user.getName());
+        }
+        return "index";
+    }
+```
+
+---
+
+###### 다음으로는 세션 저장소로 데이터베이스를 사용해보자.  
+
++ spring-session-jdbc 등록  
+
+###### 먼저 build.gradle에 다음과 같이 의존성을 등록한다.  
+
+```properties
+compile('org.springframework.session:spring-session-jdbc')  // 세션 저장소 - 데이터베이스
+```
+
+###### 그리고 application.properties에 세션 저장소를 jdbc로 선택하도록 코드를 추가한다.  
+```properties
+spring.session.store-type=jdbc
+```
+
+---
+
+###### 마지막으로 네이버 로그인을 추가해 보자.  
+###### 네이버도 구글과 같이 https://developers.naver.com/apps/#/register?api=nvlogin 으로 접속하여 client ID와 client Secret을 발급 받는다.  
+
+###### 해당 키값들을 application-oauth.properties에 등록한다. 네이버에서는 스프릴ㅇ 시큐리티를 공식 지원하지 않기 때문에 전부 수동으로 입력해야 한다.  
+
+```properties
+spring.security.oauth2.client.registration.naver.client-id=jEI3rFr_p1HraumkBayY
+spring.security.oauth2.client.registration.naver.client-secret=fDekPwBXcU
+spring.security.oauth2.client.registration.naver.redirect-uri={baseUrl}/{action}/oauth2/code/{registrationId}
+spring.security.oauth2.client.registration.naver.authorization-grant-type=authorization_code
+spring.security.oauth2.client.registration.naver.scope=name,email,profile_image
+spring.security.oauth2.client.registration.naver.client-name=Naver
+spring.security.oauth2.client.provider.naver.authorization-uri=https://nid.naver.com/oauth2.0/authorize
+spring.security.oauth2.client.provider.naver.token-uri=https://nid.naver.com/oauth2.0/token
+spring.security.oauth2.client.provider.naver.user-info-uri=https://openapi.naver.com/v1/nid/me
+# 기준이 되는 user_name의 이름을 네이버에서는 response로 해야 한다. 이유는 네이버의 회원 조회 시 반환되는 JSON 형태 때문이다.
+spring.security.oauth2.client.provider.naver.user-name-attribute=response
+```
+
++ user_name_attribute=response
+  - 기준이 되는 user_name의 이름을 네이버에서는 response로 해야 한다.
+  - 이유는 네이버의 회원 조회 시 반환되는 JSON 형태 때문이다.  
+
+###### 스프링 시큐리티에선 하위 필드를 명시할 수 없다. 최상위 필드들만 user_name으로 지정 가능하다. 하지만 네이버의 응답값 최상위 필드는 resultCode, message, response 이다.  ###### 이러한 이유로 스프링 시큐리티에서 인식 가능한 필드는 저 3개 중에 골라야 한다. 본문에서 담고 있는 response를 user_name으로 지정하고 이후 자바 코드로 response의 id를 user_name으로 지정하겠다.  
+
+###### OAuthAttributes에 다음과 같이 네이버인지 판단하는 코드와 네이버 생성자를 추가하자.  
+
+```java
+package com.zzangho.project.springboot.config.auth.dto;
+
+import com.zzangho.project.springboot.domain.user.Role;
+import com.zzangho.project.springboot.domain.user.User;
+import lombok.Builder;
+import lombok.Getter;
+
+import java.util.Map;
+
+@Getter
+public class OAuthAttributes {
+    ...
+
+    // OAuth2User에서 반환하는 사용자 정보는 Map이기 때문에 값 하나하나를 변환해야 한다.
+    public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
+        if ("naver".equals(registrationId)) {
+            return ofNaver("id", attributes);
+        }
+
+        return ofGoogle(userNameAttributeName, attributes);
+    }
+
+    ...
+
+    private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
+        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+        return OAuthAttributes.builder()
+                .name((String) response.get("name"))
+                .email((String) response.get("email"))
+                .picture((String) response.get("profile_image"))
+                .attributes(response)
+                .nameAttributeKey(userNameAttributeName)
+                .build();
+    }
+
+    ...
+}
+
+```
+
+###### 마지막으로 index.mustache에 네이버 로그인 버튼을 추가한다.  
+
+```html
+...
+        {{^name}}
+            <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
+            <a href="/oauth2/authorization/naver" class="btn btn-secondary active" role="button">Naver Login</a>
+        {{/name}}
+    </div>
+</div>
+```
+
+###### 다시 어플리케이션을 실행하고 접속을 해보면 네이버 로그인 버튼이 보일 것이다. 해당 버튼을 클릭하면 네이버 로그인 성공!  
