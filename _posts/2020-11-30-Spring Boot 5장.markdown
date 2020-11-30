@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Spring Boot 5장-1
+title: Spring Boot 5장
 summary: 열심히 기록하자!
 author: Lee Chang Ho
 date: '2020-11-30 22:50:00'
@@ -299,3 +299,89 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 }
 ```
+
+###### 구글 사용자 정보가 업데이트 되었을 때를 대비하여 update 기능도 같이 구현되었다. 사용자의 이름이나 프로필 사진이 변경되면 User 엔티티에도 반영이 된다.  
+###### CustomOAuth2UserService 클래스까지 생성되었다면 OAuthAttributes 클래스를 생성한다.  
+```java
+package com.zzangho.project.springboot.config.auth.dto;
+
+import com.zzangho.project.springboot.domain.user.Role;
+import com.zzangho.project.springboot.domain.user.User;
+import lombok.Builder;
+import lombok.Getter;
+
+import java.util.Map;
+
+@Getter
+public class OAuthAttributes {
+    private Map<String, Object> attributes;
+    private String nameAttributeKey;
+    private String name;
+    private String email;
+    private String picture;
+
+    @Builder
+    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String picture) {
+        this.attributes = attributes;
+        this.nameAttributeKey = nameAttributeKey;
+        this.name = name;
+        this.email = email;
+        this.picture = picture;
+    }
+
+    public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
+
+        return ofGoogle(userNameAttributeName, attributes);
+    }
+
+    private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
+        return OAuthAttributes.builder()
+                              .name((String) attributes.get("name"))
+                              .email((String) attributes.get("email"))
+                              .picture((String) attributes.get("picture"))
+                              .attributes(attributes)
+                              .nameAttributeKey(userNameAttributeName)
+                              .build();
+    }
+
+    public User toEntity() {
+        return User.builder()
+                    .name(name)
+                    .email(email)
+                    .picture(picture)
+                    .role(Role.GUEST)
+                    .build();
+    }
+}
+
+```
+
+###### config.auth.dto 패키지에 SessionUser 클래스를 추가한다.  
+
+```java
+package com.zzangho.project.springboot.config.auth.dto;
+
+import com.zzangho.project.springboot.domain.user.User;
+import lombok.Getter;
+
+import java.io.Serializable;
+
+@Getter
+public class SessionUser implements Serializable {
+    private String name;
+    private String email;
+    private String picture;
+
+    public SessionUser(User user) {
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.picture = user.getPicture();
+    }
+}
+
+```
+
+###### SessionUser에는 인증된 사용자 정보만 필요하다. 그 외에 필요한 정보들은 없으니 name, email, picture만 필드로 선언한다.  
+---
+###### 그럼 한번 프로젝트를 실행해서 테스트를 해보자. http://localhost:8080으로 접속을 해보면 Google Login 버튼이 보일 것이다.  
+###### 클릭해 보면 평소 다른 서비스에서 볼 수 있던 것처럼 구글 로그인 동의 화면으로 이동하며 본인의 계정을 선택하면 로그인 과정이 진행되어 화면에 이름이 노출이 된다.  
