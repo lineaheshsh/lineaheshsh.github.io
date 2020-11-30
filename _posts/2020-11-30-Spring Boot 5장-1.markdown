@@ -58,7 +58,7 @@ spring.profiles.include=oauth
 ```
 ###### 이제 이 설정값을 사용할 수 있게 되었다.  
 
-+ .gitignore 등록
++ .gitignore 등록  
 ###### 보안을 위해 깃허브에 application-oauth.properties 파일이 올라가는 것을 방지하자. 1장에서 만들었던 .gitignore에 다음과 같이 한 줄의 코드를 추가한다.
 ```
 application-oauth.properties
@@ -66,6 +66,7 @@ application-oauth.properties
 ###### 추가한 뒤 커밋했을 때 `커밋 목록에 application-oauth.properties`가 나오지 않으면 성공이다.
 ---
 ###### 구글의 로그인 인증정보를 발급 받았으니 프로젝트 구현을 진행하자. 먼저 사용자 정보를 담당할 도메인인 User 클래스를 생성하자. 패키지는 domain 아래에 user 패키지를 생성한다.  
+
 ```java
 package com.zzangho.project.springboot.domain.user;
 
