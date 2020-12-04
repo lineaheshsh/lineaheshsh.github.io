@@ -11,9 +11,9 @@ tags:   검색엔진 elasticSearch Solar
 
 ### 검색엔진 참고자료
 
-[ 엘라스틱 서치 ]
-https://github.com/itmare/es_lecture - 정리 잘 되어있음
-https://esbook.kimjmin.net/01-overview - 엘라스틱서치 가이드북
++ [ 엘라스틱 서치 ]  
+https://github.com/itmare/es_lecture - 정리 잘 되어있음  
+https://esbook.kimjmin.net/01-overview - 엘라스틱서치 가이드북  
 
-[ 솔라 ]
-https://cafe.naver.com/korlucene - 솔라 네이버 카페
++ [ 솔라 ]  
+https://cafe.naver.com/korlucene - 솔라 네이버 카페  
