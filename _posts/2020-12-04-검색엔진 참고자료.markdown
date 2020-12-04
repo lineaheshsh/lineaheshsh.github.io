@@ -15,7 +15,8 @@ tags:   검색엔진 elasticSearch Solar
 https://github.com/itmare/es_lecture - 정리 잘 되어있음  
 https://esbook.kimjmin.net/01-overview - 엘라스틱서치 가이드북  
 https://brownbears.tistory.com/3?category=158667 - 참고  
-https://brunch.co.kr/@alden/43 - 클러스터 Status 차이
+https://brunch.co.kr/@alden/43 - 클러스터 Status 차이  
+https://twofootdog.tistory.com/53 - 각종 참고 사이트 링크
 
 + [ 솔라 ]  
 https://cafe.naver.com/korlucene - 솔라 네이버 카페  
