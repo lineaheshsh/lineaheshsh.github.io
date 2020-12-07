@@ -22,9 +22,9 @@ https://bakyeono.net/post/2016-08-20-elasticsearch-querydsl-basic.html - query d
 + [ 솔라 ]  
 https://cafe.naver.com/korlucene - 솔라 네이버 카페  
 
+---
 
 
 #### 엘라스틱 서치 Query DSL
----
 
 + 통합검색 - multi_match
