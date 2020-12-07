@@ -17,6 +17,7 @@ https://esbook.kimjmin.net/01-overview - 엘라스틱서치 가이드북
 https://brownbears.tistory.com/3?category=158667 - 참고  
 https://brunch.co.kr/@alden/43 - 클러스터 Status 차이  
 https://twofootdog.tistory.com/53 - 각종 참고 사이트 링크
+https://bakyeono.net/post/2016-08-20-elasticsearch-querydsl-basic.html - query dsl
 
 + [ 솔라 ]  
 https://cafe.naver.com/korlucene - 솔라 네이버 카페  
