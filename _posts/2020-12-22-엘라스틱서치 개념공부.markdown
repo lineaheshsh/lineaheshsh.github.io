@@ -6,6 +6,7 @@ author: Lee Chang Ho
 date: '2020-12-22 16:33:00'
 category: 프로젝트
 published: true
+image:  엘라스틱서치.png
 tags:   검색엔진 elasticSearch
 ---
 
