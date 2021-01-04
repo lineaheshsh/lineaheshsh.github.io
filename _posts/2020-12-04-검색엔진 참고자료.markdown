@@ -29,3 +29,8 @@ https://cafe.naver.com/korlucene - 솔라 네이버 카페
 #### 엘라스틱 서치 Query DSL
 
 + 통합검색 - multi_match
+
+---
+
+#### 번외 DTO  
+https://velog.io/@p4rksh/Spring-Boot%EC%97%90%EC%84%9C-%EA%B9%94%EB%81%94%ED%95%98%EA%B2%8C-DTO-%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0  - DTO INNER CLASS 사용  
