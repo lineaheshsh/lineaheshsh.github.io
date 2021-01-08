@@ -17,7 +17,7 @@ tags:   Tomcat setting URL
 ###### 따라서 Get 방식으로 던지던 많은 파라미터에서 특수문자가 있다면 발생할 수 있는 문제이다.    
 
 ###### 해결방법은 Tomcat의 server.xml에 다음 옵션을 추가해주면 된다.  *relaxedQueryChars* 
-###### 아래 설정을 해주도록 하자
+###### 아래 설정을 참고하자 실제로 내가 적용한 형태다.  relaxedQueryChart의 Value는 URI에 들어가는 특수문자를 정의해 주면 된다.  
 
 ```xml
 <Connector port="8080" protocol="HTTP/1.1"
@@ -26,6 +26,9 @@ tags:   Tomcat setting URL
 			   URIEncoding="UTF-8"
 			   relaxedQueryChars="^{}[]|&quot;" />
 ``` 
+
+###### 필자의 경우 인텔리제이를 사용하여 실제 Tomcat이 설치 된 디렉토리 아래 conf/server.xml을 수정하였다.   
+####### 수정 후에는 재기동을 잊지 말도록
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTYwODUyNTE2OV19
+eyJoaXN0b3J5IjpbLTEwMjc2NjExMzZdfQ==
 -->
