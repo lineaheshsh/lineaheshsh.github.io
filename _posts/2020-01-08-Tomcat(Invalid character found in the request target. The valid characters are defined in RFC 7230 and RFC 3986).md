@@ -16,8 +16,16 @@ tags:   Tomcat setting URL
 ###### 톰캣의 특정 버전부터는 RFC 7230, RFC 3986에 의하여 특수문자를 URI에 허용하지 않는다.  (회사에서 테스트하다가 오류가 나서 찾아봄)  
 ###### 따라서 Get 방식으로 던지던 많은 파라미터에서 특수문자가 있다면 발생할 수 있는 문제이다.    
 
+###### 해결방법은 Tomcat의 server.xml에 다음 옵션을 추가해주면 된다.  *relaxedQueryChars* 
 ###### 아래 설정을 해주도록 하자
- 
+
+```xml
+<Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443"
+			   URIEncoding="UTF-8"
+			   relaxedQueryChars="^{}[]|&quot;" />
+``` 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTk3NDU2NDY1N119
+eyJoaXN0b3J5IjpbLTYwODUyNTE2OV19
 -->
