@@ -6,7 +6,7 @@ author: Lee Chang Ho
 date: '2021-01-08 15:37:00'
 category: 프로젝트
 published: true
-image:  tomcat-logo.png
+image:  tomcatlogo.png
 tags:   Tomcat setting URL
 ---
 
@@ -30,5 +30,5 @@ tags:   Tomcat setting URL
 ###### 필자의 경우 인텔리제이를 사용하여 실제 Tomcat이 설치 된 디렉토리 아래 conf/server.xml을 수정하였다.   
 ###### 수정 후에는 재기동을 잊지 말도록!
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTc3NzAzNDk1OV19
+eyJoaXN0b3J5IjpbLTE2MTMwNTU3ODQsMTc3NzAzNDk1OV19
 -->
