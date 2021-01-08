@@ -11,8 +11,9 @@ tags:   Tomcat setting URL
 ---
 
  ---
-##### 수동설치를 하게 된 이유
+##### Invalid character found in the request target. The valid characters are defined in RFC 7230 and RFC 3986 오류
  ---
+###### 톰캣의 특정 버전부터는 RFC 7230, RFC 3986에 의하여 특수문자를 URI에 허용하지 않는다. Get으로 ㄷ
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTEwNjAwNjA4XX0=
+eyJoaXN0b3J5IjpbMjEzNDc5NDc5NV19
 -->
