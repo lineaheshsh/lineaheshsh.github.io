@@ -1,4 +1,4 @@
 ---
 layout: category
-title: search
+title: 검색엔진
 ---
