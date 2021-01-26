@@ -10,6 +10,14 @@ plugins:
   - jekyll-sitemap
   - jekyll/tagging
 
+urls:
+  - text : SearchEngine
+    url : /searchEngine
+  - text : Git
+    url : /git
+  - text : Etc
+    url : /etc
+
 paginate: 5
 paginate_path: "/page/:num"
 
