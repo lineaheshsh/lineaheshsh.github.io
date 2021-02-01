@@ -176,7 +176,12 @@ def  new_board(request):
 
 ###### 이상으로 sqlalchemy 연동이 완료되었다. 이제 테스트를 해보자
 
+###### 등록
+![이미지]({{ site.url }}/images/부트스트랩등록화면.png)
+
+###### 등록 된 데이터 조회
+![이미지]({{ site.url }}/images/부트스트랩등록완료.png)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTc5NDQwMjg2Nyw1ODE1MTMwNDgsMTg2MT
+eyJoaXN0b3J5IjpbLTgyMDg1ODI0NSw1ODE1MTMwNDgsMTg2MT
 c4ODcyNSwtNzcxODk0MjYyXX0=
 -->
