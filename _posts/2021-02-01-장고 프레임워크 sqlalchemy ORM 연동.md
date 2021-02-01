@@ -122,7 +122,31 @@ self.idx, self.ttl, self.contents, self.writer, self.keyword, str(self.date))
 ###### __tablename__ 이 부분이 테이블명과 맵핑이 되는 부분인듯 하다. 나머지 밑에 부분들은 테이블의 컬럼으로 보면 된다.
 ###### 이제 views.py에서 연동한 sqlalchemy을 통해 데이터를 가져오고 등록해 보자
 
+###### 아래 부분을 상단에 추가해 주고
+```python
+from  djangoProject.database  import  db_session
+import  datetime
+```
+
+###### def board함수에 아래처럼 소스를 수정하자
+```python
+def  board(request):
+
+  
+
+	query_result = db_session.query(MySQLBoard).all()
+
+	  
+
+	# 페이지에 데이터를 던져주어 페이지에서 boardList 데이터를 받을 수 있다.
+
+	return  render(request, 'main/board/board.html', {'boardList':query_result})
+```
+
+###### 그리고 new_board함수도 마찬가지로 아래처럼 소스를 수정하자
+`
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTgxNTEzMDQ4LDE4NjE3ODg3MjUsLTc3MT
-g5NDI2Ml19
+eyJoaXN0b3J5IjpbLTE3NDg3Mjc1MCw1ODE1MTMwNDgsMTg2MT
+c4ODcyNSwtNzcxODk0MjYyXX0=
 -->
