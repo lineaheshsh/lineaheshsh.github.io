@@ -119,8 +119,10 @@ return  "<MySQLBoard(idx='%d', ttl='%s', contents='%s', writer='%s', keyword='%s
 self.idx, self.ttl, self.contents, self.writer, self.keyword, str(self.date))
 ```
 ###### 위에서 MySQLBoard라는 Model을 새로 만들었다.
-###### 이제 views.py에서 DB
+###### __tablename__ 이 부분이 테이블명과 맵핑이 되는 부분인듯 하다. 나머지 밑에 부분들은 테이블의 컬럼으로 보면 된다.
+###### 이제 views.py에서 연동한 sqlalchemy을 통해 데이터를 가져오고 등록해 보자
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTAwODQ1NzQ5LDE4NjE3ODg3MjUsLTc3MT
+eyJoaXN0b3J5IjpbNTgxNTEzMDQ4LDE4NjE3ODg3MjUsLTc3MT
 g5NDI2Ml19
 -->
