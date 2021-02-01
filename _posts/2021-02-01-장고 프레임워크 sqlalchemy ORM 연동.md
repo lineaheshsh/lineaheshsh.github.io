@@ -144,9 +144,39 @@ def  board(request):
 ```
 
 ###### 그리고 new_board함수도 마찬가지로 아래처럼 소스를 수정하자
-`
+```python
+## 데이터 등록
+
+def  new_board(request):
+
+  
+
+	## request method가 POST이면 아래 로직 수행
+
+	if  request.method == 'POST':
+
+	  
+
+	mysqlBoard = MySQLBoard(ttl=request.POST['ttl'], contents=request.POST['contents'], writer=request.POST['writer'], keyword=request.POST['keyword'], date=datetime.datetime.now())
+
+	db_session.add(mysqlBoard)
+
+	db_session.commit()
+
+	## 등록이 성공하면 목록 페이지로 이동
+
+	return  redirect('/board/')
+
+	  
+
+	## POST 요청이 아니면 등록 화면으로 이동
+
+	return  render(request, 'main/board/new_board.html')
+```
+
+###### 이상으로 sqlalchemy 연동이 완료되었다. 이제 테스트를 해보자
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3NDg3Mjc1MCw1ODE1MTMwNDgsMTg2MT
+eyJoaXN0b3J5IjpbMTc5NDQwMjg2Nyw1ODE1MTMwNDgsMTg2MT
 c4ODcyNSwtNzcxODk0MjYyXX0=
 -->
