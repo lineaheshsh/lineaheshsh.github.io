@@ -21,9 +21,10 @@ tags:   장고 Django 프레임워크 파이썬 Python 부트스트랩 sqlalchem
 ![이미지]({{ site.url }}/images/부트스트랩조회화면.png)
 
 ###### 바뀐 등록 화면
-![이미지]({{ site.url }}/images/부트스트랩조회화면.png)
+![이미지]({{ site.url }}/images/부트스트랩등록화면.png)
 
 
+---
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY5OTYxMDMzOSwtNzcxODk0MjYyXX0=
+eyJoaXN0b3J5IjpbLTMwNDgzMTk4OCwtNzcxODk0MjYyXX0=
 -->
