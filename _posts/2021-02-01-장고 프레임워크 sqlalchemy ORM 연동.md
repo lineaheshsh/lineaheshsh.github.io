@@ -69,7 +69,58 @@ def  init_db():
 
 Base.metadata.create_all(engine)
 ```
+
+###### 그 다음으로는 models.py에 Model을 만들어주자
+```python
+from  djangoProject.database  import  Base
+
+from  django.db  import  models
+
+from  sqlalchemy  import  Column, Integer, String, DateTime
+
+  
+
+# Create your models here.
+
+class  Board(models.Model):
+
+ttl = models.CharField(max_length=50)
+
+contents = models.TextField()
+
+writer = models.CharField(max_length=20)
+
+  
+
+# MySQL DB Create Model
+
+class  MySQLBoard(Base):
+
+__tablename__ = 'covid_board'
+
+idx = Column(Integer, primary_key=True, unique=True, autoincrement=True)
+
+ttl = Column(String)
+
+contents = Column(String)
+
+writer = Column(String)
+
+keyword = Column(String)
+
+date = Column(DateTime)
+
+  
+
+def  __repr__(self):
+
+return  "<MySQLBoard(idx='%d', ttl='%s', contents='%s', writer='%s', keyword='%s', date='%s')>" % (
+
+self.idx, self.ttl, self.contents, self.writer, self.keyword, str(self.date))
+```
+###### 위에서 MySQLBoard라는 Model을 새로 만들었다.
+###### 이제 views.py에서 DB
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2NjczNDg4OTAsMTg2MTc4ODcyNSwtNz
-cxODk0MjYyXX0=
+eyJoaXN0b3J5IjpbOTAwODQ1NzQ5LDE4NjE3ODg3MjUsLTc3MT
+g5NDI2Ml19
 -->
