@@ -30,7 +30,46 @@ tags:   장고 Django 프레임워크 파이썬 Python 부트스트랩 sqlalchem
 ###### 첫번째로 sqlalchemy을 설치를 해야 한다. 그리고 우리는 여깃 mysql을 사용할 것이니 pymysql도 같이 설치를 해주자
 ```python
 pip install sqlalchemy
+pip install pymysql
+```
+
+###### 그 다음에 DB연결을 해주는 database.py 파일을 만들자
+```python
+from  sqlalchemy  import  create_engine
+
+from  sqlalchemy.orm  import  scoped_session, sessionmaker
+
+from  sqlalchemy.ext.declarative  import  declarative_base
+
+  
+
+id = "root"
+
+password = "1q2w3e4r5t"
+
+host = "localhost"
+
+db_name = "covid"
+
+  
+
+engine = create_engine("mysql+pymysql://{0}:{1}@{2}/{3}?charset=utf8".format(id, password, host, db_name), convert_unicode=False, pool_pre_ping=True)
+
+db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
+
+  
+
+Base = declarative_base()
+
+Base.query = db_session.query_property()
+
+  
+
+def  init_db():
+
+Base.metadata.create_all(engine)
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTg2MTc4ODcyNSwtNzcxODk0MjYyXX0=
+eyJoaXN0b3J5IjpbLTE2NjczNDg4OTAsMTg2MTc4ODcyNSwtNz
+cxODk0MjYyXX0=
 -->
