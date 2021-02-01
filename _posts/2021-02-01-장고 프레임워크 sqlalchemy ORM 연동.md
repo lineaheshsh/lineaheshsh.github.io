@@ -9,6 +9,14 @@ published: true
 image:  django.png
 tags:   장고 Django 프레임워크 파이썬 Python
 ---
+
+## 장고 프레임워크 sqlalchemy 연동하기
+---
+#### Bootstrap 적용
+---
+###### 일단 페이지가 너무 밋밋하여 부트스트랩 템플릿을 하나 적당히 골라서 기존 페이지에 입혀 주었다. 
+
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTAwODM0NjQ5Ml19
+eyJoaXN0b3J5IjpbLTc3MTg5NDI2Ml19
 -->
