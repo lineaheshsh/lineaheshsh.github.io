@@ -27,10 +27,10 @@ tags:   장고 Django 프레임워크 파이썬 Python 부트스트랩 sqlalchem
 ---
 #### sqlalchemy 연동
 ---
-###### 첫번째로 sqlalchemy을 설치를 해야 한다. 그리고 pymysql도 같이 설치를 해주자
+###### 첫번째로 sqlalchemy을 설치를 해야 한다. 그리고 우리는 여깃 mysql을 사용할 것이니 pymysql도 같이 설치를 해주자
 ```python
 pip install sqlalchemy
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzU0ODY1NjE4LC03NzE4OTQyNjJdfQ==
+eyJoaXN0b3J5IjpbMTg2MTc4ODcyNSwtNzcxODk0MjYyXX0=
 -->
