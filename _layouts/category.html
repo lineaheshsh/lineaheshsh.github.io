@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-
+{% include hero.html %}
 <div class="container">
 	<div class="row">
 		<div class="col col-12">
@@ -16,7 +16,8 @@ layout: default
 	<div class="row">
 	{% assign category = page.category | default: page.title %}
 	{% for post in site.categories[category] %}
-		{{post.title}}
+		{% include article-content.html %}
 	{% endfor %}
 	</div>
 </div>
+{% include pagination.html %}
