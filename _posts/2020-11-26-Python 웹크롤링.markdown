@@ -4,7 +4,7 @@ title: Python 웹크롤링
 summary: 열심히 기록하자!
 author: Lee Chang Ho
 date: '2020-11-26 10:49:00'
-category: Python & Django
+category: Python
 published: true
 image:  파이썬.png
 tags:   파이썬, Python, Crawling
