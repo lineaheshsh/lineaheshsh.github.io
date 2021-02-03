@@ -17,6 +17,6 @@ layout: default
 	{% assign category = page.category | default: page.title %}
 	{% for post in site.categories[category] %}
 		{{post.title}}
-	{% endif %}
+	{% endfor %}
 	</div>
 </div>
