@@ -4,7 +4,7 @@ title: 검색엔진 참고자료
 summary: 열심히 기록하자!
 author: Lee Chang Ho
 date: '2020-12-04 10:19:00'
-category: 프로젝트
+category: 검색엔진
 published: true
 tags:   검색엔진 elasticSearch Solar
 ---
