@@ -4,7 +4,7 @@ title: Spring Boot 4장
 summary: 열심히 기록하자!
 author: Lee Chang Ho
 date: '2020-11-27 15:52:00'
-category: 프로젝트
+category: Spring
 published: true
 image:  스프링부트.png
 tags:   SpringBoot Spring Gradle Mustache 머스테치
