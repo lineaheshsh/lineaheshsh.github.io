@@ -33,7 +33,7 @@ echo 262144 > /proc/sys/vm/max_map_count
 ```bash
 # sudo echo 262144 > /proc/sys/vm/max_map_count
 /bin/sh: 11: cannot create /proc/sys/vm/max_map_count: Read-only file system
-```
+```  
 
 ###### read-only로 잡혀 수정이 안되어버린다.  
 ###### 계속 방법을 찾던 중 친구가 나에게 방법을 알려주었다.
@@ -44,5 +44,5 @@ wsl -d docker-desktop
 
 ###### 해당 명령어를 cmd 창에서 실행을 하면 리눅스 환경으로 cmd창이 바뀐다. 그 다음 명령어를 치니 잘 된다!
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzMDQ0NTg1Ml19
+eyJoaXN0b3J5IjpbNDA3MTMwNDY4XX0=
 -->
