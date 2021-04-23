@@ -16,7 +16,7 @@ tags:   검색엔진 엘라스틱서치 ElasticSearch
 ###### 리눅스 계열의 환경이라면 아래 명령어를 입력하여 해결을 할 수가 있다.
 ```shell script
 sudo sysctl -w vm.max_map_count=262144
-
+또는
 echo 262144 > /proc/sys/vm/max_map_count
 /bin/sh: 11: cannot create 
 ```
@@ -30,6 +30,13 @@ echo 262144 > /proc/sys/vm/max_map_count
 ###### 위의 방법을 보자마자 오!? 그러면 되겠네 어차피 컨테이너의 안에 들어가면 리눅스 환경이니 되겠다!! 
 
 ###### 하지만..
+```
+# sudo echo 262144 > /proc/sys/vm/max_map_count
+/bin/sh: 11: cannot create /proc/sys/vm/max_map_count: Read-only file system
+```
+
+###### read-only로 잡혀 수정이 안되어버린다.  
+###### 계속 방법을 찾던 친구가 나에게 방법을 알려주었다.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzODc2ODI3NDZdfQ==
+eyJoaXN0b3J5IjpbMTAxMDQ1Mzc3NV19
 -->
