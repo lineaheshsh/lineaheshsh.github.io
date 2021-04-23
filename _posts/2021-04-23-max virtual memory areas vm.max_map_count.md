@@ -22,7 +22,9 @@ sudo sysctl -w vm.max_map_count=262144
 
 #### 구글링을 통해 찾은 방법
 ---
-- 도커 컨테이너 환경에 들어가서 sudo sysctl -w vm.max_map_count=262144 명령어를 사용한다.
+- 도커 컨테이너 환경에 들어가서 sudo sysctl -w vm.max_map_count=262144 명령어를 사용한다
+
+###### 위의 방법을 보자마자 오!? 그러면 되겠네 어차피 컨테이너의 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDY0Nzc3MjA0XX0=
+eyJoaXN0b3J5IjpbLTkxMTI5NzkxNl19
 -->
