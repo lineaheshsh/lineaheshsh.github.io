@@ -20,6 +20,9 @@ sudo sysctl -w vm.max_map_count=262144
 ###### 하지만 나의 경우 window 환경으로 위의 명령어가 실행이 되지 않는다  
 ###### 어떻게 해야 하는 것인가(구글링을 열심히 해보자....)
 
+#### 구글링을 통해 찾은 방법
+---
+- 도커 컨테이너 환경에 들어가서 sudo sysctl -w vm.max_map_count=262144 명령어를 사용한다.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTAyMzgzNzNdfQ==
+eyJoaXN0b3J5IjpbNDY0Nzc3MjA0XX0=
 -->
