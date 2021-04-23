@@ -16,6 +16,9 @@ tags:   검색엔진 엘라스틱서치 ElasticSearch
 ###### 리눅스 계열의 환경이라면 아래 명령어를 입력하여 해결을 할 수가 있다.
 ```shell script
 sudo sysctl -w vm.max_map_count=262144
+
+echo 262144 > /proc/sys/vm/max_map_count
+/bin/sh: 11: cannot create 
 ```
 ###### 하지만 나의 경우 window 환경으로 위의 명령어가 실행이 되지 않는다  
 ###### 어떻게 해야 하는 것인가(구글링을 열심히 해보자....)
@@ -24,7 +27,9 @@ sudo sysctl -w vm.max_map_count=262144
 ---
 - 도커 컨테이너 환경에 들어가서 sudo sysctl -w vm.max_map_count=262144 명령어를 사용한다
 
-###### 위의 방법을 보자마자 오!? 그러면 되겠네 어차피 컨테이너의 
+###### 위의 방법을 보자마자 오!? 그러면 되겠네 어차피 컨테이너의 안에 들어가면 리눅스 환경이니 되겠다!! 
+
+###### 하지만..
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTkxMTI5NzkxNl19
+eyJoaXN0b3J5IjpbLTEzODc2ODI3NDZdfQ==
 -->
