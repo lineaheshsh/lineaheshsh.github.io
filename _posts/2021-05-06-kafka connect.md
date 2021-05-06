@@ -11,8 +11,13 @@ tags:   Apache Kafka Connect Debezium
 ---
 
 ## Kafka Connect
-###### 카프카를 사용하다보면 Kafka Connect라는
+###### 카프카를 사용하다보면 Kafka Connect라는 용어를 들어볼 수 있다.  
+###### 그럼 카프카 커넥트를 한번 알아보자.
 
+---
+#### Kafka Connect란?
+--- 
+###### 기본적으로 Kafka는 Broker, Producer, Consumer
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTk5Mzc0MTg0Ml19
+eyJoaXN0b3J5IjpbLTE1ODk2NjI3M119
 -->
