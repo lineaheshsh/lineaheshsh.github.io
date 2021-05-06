@@ -21,7 +21,14 @@ tags:   Apache Kafka Connect Debezium
 ###### 여기에서 Broker는 카프카이며 Producer는 메세지를 생산하는 역할, Consumer는 메세지를 소비하는 역할을 담당하고 있다.  
 ###### 이 구성에서 Producer와 Consumer의 역할을 대체할 수 있도록 나온것이 Kafka Connect이다.
 
-###### 간단한 
+###### 간단한 데이터 파이프라인을 만들 때에도 직접 Producer와 Consumer를 만들었지만 이 Kafka Connect를 이용하면 직접 만들 필요 없이 설정만 해주면 된다.
+
+---
+#### SOURCE, SINK 개념
+---
+- Source  
+####
+- Sink
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU1MDM0OTU0N119
+eyJoaXN0b3J5IjpbLTc1MDgwMzk1OV19
 -->
