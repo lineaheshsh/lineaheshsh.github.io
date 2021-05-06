@@ -24,12 +24,14 @@ tags:   Apache Kafka Connect Debezium
 ###### 간단한 데이터 파이프라인을 만들 때에도 직접 Producer와 Consumer를 만들었지만 이 Kafka Connect를 이용하면 직접 만들 필요 없이 설정만 해주면 된다.
 
 ---
-#### SOURCE, SINK 개념
+#### SOURCE, SINK??
 ---
 - Source  
 ###### 저장소에서 데이터를 가져와 Kafka로 데이터를 "전달"
 - Sink
 ###### Kafka에서 데이터를 가져와 저장소로 "저장"
+
+###### Source와 Sink는 개념은 이것이 전부이다. 중요한 것은 어디서 가져오고 어디로 넣는지 인데 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwNzc5NzcxMDRdfQ==
+eyJoaXN0b3J5IjpbODQ4MTI4MF19
 -->
