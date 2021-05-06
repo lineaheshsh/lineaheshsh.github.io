@@ -17,7 +17,11 @@ tags:   Apache Kafka Connect Debezium
 ---
 #### Kafka Connect란?
 --- 
-###### 기본적으로 Kafka는 Broker, Producer, Consumer
+###### 기본적으로 Kafka는 Broker, Producer, Consumer로 구성이 되어있다.
+###### 여기에서 Broker는 카프카이며 Producer는 메세지를 생산하는 역할, Consumer는 메세지를 소비하는 역할을 담당하고 있다.  
+###### 이 구성에서 Producer와 Consumer의 역할을 대체할 수 있도록 나온것이 Kafka Connect이다.
+
+###### 간단한 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1ODk2NjI3M119
+eyJoaXN0b3J5IjpbLTU1MDM0OTU0N119
 -->
