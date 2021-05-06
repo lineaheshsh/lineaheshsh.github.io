@@ -27,8 +27,9 @@ tags:   Apache Kafka Connect Debezium
 #### SOURCE, SINK 개념
 ---
 - Source  
-####
+###### 저장소에서 데이터를 가져와 Kafka로 데이터를 "전달"
 - Sink
+###### Kafka에서 데이터를 가져와 저장소로 "저장"
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTc1MDgwMzk1OV19
+eyJoaXN0b3J5IjpbLTEwNzc5NzcxMDRdfQ==
 -->
