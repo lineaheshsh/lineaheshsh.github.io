@@ -31,7 +31,8 @@ tags:   Apache Kafka Connect Debezium
 - Sink
 ###### Kafka에서 데이터를 가져와 저장소로 "저장"
 
-###### Source와 Sink는 개념은 이것이 전부이다. 중요한 것은 어디서 가져오고 어디로 넣는지 인데 
+###### Source와 Sink는 개념은 이것이 전부이다. 중요한 것은 어디서 가져오고 어디로 넣는지 인데  아래 링크를 타고 들어가보면 많은 Plugin이 존재한다는 것을 볼 수 있다.(J
+###### https://www.confluent.io/hub/?utm_medium=sem&utm_source=google&utm_campaign=ch.sem_br.nonbrand_tp.prs_tgt.kafka-connectors_mt.mbm_rgn.apac_lng.eng_dv.all_con.kafka-connectors&utm_term=%2Bkafka%20%2Bconnector&creative=&device=c&placement=&gclid=CjwKCAjwhMmEBhBwEiwAXwFoEWGTxwFT2El8BB9tnx3x3e30lnbThm1hRmitiqudbOyZYNUkg5g2BBoCfk4QAvD_BwE
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODQ4MTI4MF19
+eyJoaXN0b3J5IjpbLTExMTUyMzk5M119
 -->
