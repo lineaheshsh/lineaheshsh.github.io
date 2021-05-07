@@ -3,7 +3,7 @@ layout: post
 title: kafka connect
 summary: 열심히 기록하자!
 author: Lee Chang Ho
-date: '2021-02-16 23:08:00'
+date: '2021-05-06 14:08:00'
 category: 프로젝트
 published: true
 image:  kafka/logo.png
@@ -36,5 +36,6 @@ tags:   Apache Kafka Connect Debezium
 ###### 각각의 Plugin들은 Sink와 Source용이 존재하기 때문에 잘 보고 선택을 해야 한다.  
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjg3MTQyNzQ1LC0xMzYzMjk3MzMxXX0=
+eyJoaXN0b3J5IjpbLTE5MDY5MzcwNyw2ODcxNDI3NDUsLTEzNj
+MyOTczMzFdfQ==
 -->
